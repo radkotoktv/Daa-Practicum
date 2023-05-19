@@ -14,6 +14,7 @@ int currentComponent = 1;
 
 void dfs(int node){
     components[node] = currentComponent;
+    used[node] = 1;
     for(int i = 0; i < graph[node].size(); i++){
         if(!used[graph[node][i]]){
             dfs(graph[node][i]);

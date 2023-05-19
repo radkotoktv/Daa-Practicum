@@ -1,47 +1,47 @@
-#include <iostream>
-#include <vector>
-#include <algorithm>
-
+#include<iostream> //kofi!!!;
+#include<algorithm>
 using namespace std;
 
-int n, k;
-vector<int> cables;
+int cabel[100005];
+int n;      // брой кабели
+int k;      // брой парчета, които са нужни
 
-bool OK(int mid){
-    int numberOfCables = 0;
+bool OK(int x){
+    int numberOfCabels = 0;     //брой нарязани кабели с дължина x
     for(int i = 0; i < n; i++){
-        if(cables[i] >= mid){
-            numberOfCables += cables[i] / mid;
-        }
+        numberOfCabels += (cabel[i]/x);
     }
-    return numberOfCables >= k;
+    return numberOfCabels >= k;
+   
 }
 
 int main(){
-    scanf("%d%d", &n, &k);
-    int temp;
-    int rightBound = 1;
+    int rightBound = 1;         // минимална дължина на кабел по условие
+
+    scanf("%d %d",&n, &k);
+
     for(int i = 0; i < n; i++){
-        scanf("%d", &temp);
-        cables.push_back(temp);
-        rightBound = max(rightBound, temp);
+        scanf("%d", &cabel[i]);
+        rightBound = max(rightBound, cabel[i]);
     }
 
-    sort(cables.begin(), cables.end());
+     //binary Search
 
-    int l = 1;
-    int r = rightBound;
-    int maxLength = 0;
+    int left = 1;
+    int right = rightBound;
+    int mid; 
+    int maxLengthOfCabel = 0; // максимална дължина на кабел, която можем да изрежем
+                              // по условие е 0
 
-    while(l <= r){
-        int mid = l + (r - l) / 2;
+    while(left <= right){
+        mid = left + (right - left )/2;
         if(OK(mid)){
-            l = mid + 1;
-            maxLength = max(mid, maxLength);
+            left = mid + 1;
+            maxLengthOfCabel = max(maxLengthOfCabel, mid);
         }
-        else {
-            r = mid - 1;
+        else{
+            right = mid - 1;
         }
     }
-    printf("%d", maxLength);
+    printf("%d\n", maxLengthOfCabel);
 }

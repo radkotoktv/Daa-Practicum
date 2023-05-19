@@ -12,10 +12,10 @@ int n, m;
 
 int main(){
     scanf("%d%d", &n, &m);
+
     vector<pair<int, int>> labels;
-    
     int start, end;
-    for(int i = 0; i < m; i++){
+    for(size_t i = 0; i < m; i++){
         scanf("%d%d", &start, &end);
         labels.push_back({start, end});
     }
@@ -26,18 +26,18 @@ int main(){
     int left = labels[0].first;
     int right = labels[0].second;
 
-    for(int i = 1; i < m; i++){
+    for(size_t i = 1; i < m; i++){
         if(labels[i].first <= right){
             right = max(labels[i].second, right);
         }
         else {
-            covered += (right - left + 1);
+            covered += right - left + 1;
             left = labels[i].first;
             right = labels[i].second;
         }
     }
-    covered += (right - left + 1);
 
+    covered += right - left + 1;
 
     cout << covered;
 }
