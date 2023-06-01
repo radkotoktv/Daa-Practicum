@@ -26,7 +26,7 @@ void init(){
 }
 
 int findSet(int node){
-    if(node != parent[node]){
+    if(node == parent[node]){
         return node;
     }
     return parent[node] = findSet(parent[node]);
