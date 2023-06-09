@@ -1,78 +1,76 @@
 #include <iostream>
-#include <queue>
 #include <vector>
+#include <queue>
 
 using namespace std;
 
 int n, m;
-int minutes[10005];
+int schedules[10005];
 vector<pair<int, int>> graph[10005];
 priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> spis;
-bool used[10005];
-int opt[10005];
-const int inf = 1e9;
-int parent[10001];
+int dist[10005];
+int parent[10005];
 vector<int> path;
 
 int main(){
     scanf("%d%d", &n, &m);
-    for(int i = 1; i <= n; i++){
-        scanf("%d", &minutes[i]);
-    }
+    fill(dist, dist + n + 1, 99999999);
+    dist[1] = 0;
 
-    int s, e, w;
-    for(int i = 1; i <= m; i++){
-        scanf("%d%d%d", &s, &e, &w);
-        graph[s].push_back({e, w});
-    }
-
-    fill(opt, opt + 10005, inf);
-
-    opt[1] = 0;
     parent[1] = 0;
-    
+    for(int i = 2; i <= n; i++){
+        parent[i] = i;
+    }
+
+    for(int i = 1; i <= n; i++){
+        scanf("%d", &schedules[i]);
+    }
+
+    int start, end, w;
+    for(int i = 0; i < m; i++){
+        scanf("%d%d%d", &start, &end, &w);
+        graph[start].push_back({end, w});
+    }
+
     spis.push({0, 1});
     while(!spis.empty()){
         int node = spis.top().second;
-        used[node] = true;
         spis.pop();
         for(int i = 0; i < graph[node].size(); i++){
             int next = graph[node][i].first;
-            if(!used[next]){
-                int curPath = opt[node] + graph[node][i].second;
-                if(curPath % minutes[next] && next != n){
-                    int x = curPath / minutes[next];
-                    curPath = (x + 1) * minutes[next];
+            int current = dist[node] + graph[node][i].second;
+            if(current < dist[next]){
+                int curPath = dist[node] + graph[node][i].second;
+                if(curPath % schedules[next] && next != n){
+                    int x = curPath / schedules[next];
+                    curPath = (x + 1) * schedules[next];
                 }
 
-                if(curPath < opt[next]){
+                if(curPath < dist[next]){
                     parent[next] = node;
-                    opt[next] = curPath;
-                    spis.push({opt[next], next});
+                    dist[next] = curPath;
+                    spis.push({dist[next], next});
                 }
-                
             }
         }
     }
 
-    path.push_back(n);
-    int temp = parent[n];
-    while(parent[temp] != 0){
-        path.push_back(temp);
-        temp = parent[temp];
-    }
-    path.push_back(temp);
-
-    if(opt[n] == inf){
+    if(dist[n] == 99999999){
         printf("-1");
-    }
-    else {
-        printf("%d\n", opt[n]);
-        printf("%d\n", path.size());
-        while(!path.empty()){
-            printf("%d ", path.back());
-            path.pop_back();
-        }
+        return 0;
     }
 
+    printf("%d\n", dist[n]);
+    
+    path.push_back(n);
+    while(parent[n] != 0){
+        path.push_back(parent[n]);
+        n = parent[n];
+    }
+
+    printf("%d\n", path.size());
+
+    for(int i = path.size() - 1; i >= 0; i--){
+        printf("%d ", path[i]);
+    }
 }

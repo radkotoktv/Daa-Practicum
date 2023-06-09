@@ -4,29 +4,32 @@
 
 using namespace std;
 
-int n;
-vector<pair<int, int>> graph[10005];
-bool used[10005];
+int n, m, k;
+vector<pair<int, int>> graph[20005];
+bool used[20005];
+int dist[20005];
 priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> spis;
-int dist[10005];
 
 int main(){
-    scanf("%d", &n);
-    fill(dist, dist + n, 99999);
-    dist[1] = 0;
-
-    int start, end, w;
-    for(int i = 0; i < n; i++){
-        scanf("%d%d%d", &start, &end, &w);
-        graph[start].push_back({end, w});
+    scanf("%d%d%d", &n, &m, &k);
+    
+    int start, end, price, time;
+    for(int i = 0; i < m; i++){
+        scanf("%d%d%d%d", &start, &end, &price, &time);
+        graph[start].push_back({end, time - price});
+        graph[end].push_back({start, time - price});
     }
 
-    //Dijkstra start
+    dist[1] = 0;
+    for(int i = 2; i <= n; i++){
+        dist[i] = 9999999;
+    }
 
-    spis.push({0, 1});
+    spis.push({0, 1});  
     while(!spis.empty()){
         int node = spis.top().second;
         spis.pop();
+        used[node] = true;
         for(int i = 0; i < graph[node].size(); i++){
             int next = graph[node][i].first;
             if(!used[next]){
@@ -38,21 +41,6 @@ int main(){
         }
     }
 
-    //Dijkstra end
+    printf("%d", k - dist[n]);
 
-    cout << dist[4];
 }
-
-/*
-10
-1 2 1
-1 3 2
-3 6 3
-3 7 1
-6 8 3
-5 8 4
-2 5 7
-2 4 6
-1 4 5
-1 7 8
-*/
