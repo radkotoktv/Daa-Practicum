@@ -1,7 +1,11 @@
 {
     "files.associations": {
         "iostream": "cpp",
+<<<<<<< HEAD
         "queue": "cpp",
         "utility": "cpp"
+=======
+        "queue": "cpp"
+>>>>>>> 5eaee1b91d360df3624f12298291c5f620e1552b
     }
 }
