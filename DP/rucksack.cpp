@@ -27,12 +27,11 @@ int main(){
         dp[0][i] = 0;
     }
 
-
     int curSum = 0;
     int curIndex = 0;
     for(int i = 1; i <= t; i++){
         for(int j = 1; j <= n; j++){
-            if(i >= items[j].w && dp[i - items[j].w][0] != 0){
+            if(i >= items[j].w && !dp[i - items[j].w][j]){
                 if(curSum < items[j].price + dp[i - items[j].w][0]){
                     curSum = items[j].price + dp[i - items[j].w][0];
                     curIndex = j;
@@ -40,13 +39,13 @@ int main(){
             }
         }
         if(curSum > dp[i - 1][0]){
-            copyRows(i - items[curIndex].w, i);
+            copyRows(i, i - items[curIndex].w);
             dp[i][0] = curSum;
             dp[i][curIndex] = 1;
         }
         else {
-            dp[i][0] = dp[i - 1][0];
             copyRows(i, i - 1);
+            dp[i][0] = dp[i - 1][0];
         }
     }
 
